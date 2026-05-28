@@ -56,6 +56,7 @@ Open **http://localhost:8000** — you'll see the parent lookup page. Staff logi
 | Admin | admin@haleys.test  | password |
 | Staff | staff@haleys.test  | password |
 
+test 
 The seeder also creates one business (`Haleys Playhouse`, code `HAL`), 4 packages and 4 sample children.
 
 ---
