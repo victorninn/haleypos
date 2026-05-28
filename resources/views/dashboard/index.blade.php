@@ -3,6 +3,52 @@
 @section('subtitle', 'Live overview of active sessions')
 
 @section('content')
+@if($subscription)
+    @php $days = $subscription->daysRemaining(); @endphp
+    @if(! $subscription->is_lifetime && $days !== null && $days <= 7)
+        <div class="mb-5 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 flex items-start gap-3" data-testid="subscription-warning">
+            <svg class="w-5 h-5 mt-0.5 text-amber-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M4.93 19h14.14a2 2 0 001.74-3L13.74 4a2 2 0 00-3.48 0L3.2 16a2 2 0 001.73 3z"/></svg>
+            <div class="text-sm">
+                <div class="font-bold text-amber-900">
+                    @if($days <= 0)
+                        Subscription expires today.
+                    @elseif($days <= 3)
+                        Subscription expires in {{ $days }} {{ $days === 1 ? 'day' : 'days' }}.
+                    @else
+                        Subscription expires in {{ $days }} days.
+                    @endif
+                </div>
+                <div class="text-amber-800 mt-0.5">Contact your administrator to renew the {{ $subscription->planLabel() }} plan.</div>
+            </div>
+        </div>
+    @endif
+@endif
+
+<div class="card p-5 mb-6" data-testid="subscription-card">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div>
+            <div class="text-xs uppercase tracking-widest text-stone-500 font-semibold">Subscription</div>
+            <div class="mt-1 font-bold text-stone-900">{{ $subscription?->planLabel() ?? 'No active plan' }}</div>
+            @if($subscription)
+                <div class="text-xs text-stone-500 mt-0.5">
+                    Started {{ $subscription->starts_at?->format('d M Y') }}
+                    @if($subscription->expires_at) · expires {{ $subscription->expires_at->format('d M Y') }} @endif
+                </div>
+            @endif
+        </div>
+        <div class="flex items-center gap-3">
+            @if($subscription)
+                @php $badge = $subscription->statusBadge(); $days = $subscription->daysRemaining(); @endphp
+                <span class="chip chip-{{ $badge['tone'] }}">{{ $badge['label'] }}</span>
+                <div class="text-right">
+                    <div class="text-2xl font-extrabold text-stone-900">{{ $days ?? '∞' }}</div>
+                    <div class="text-[10px] uppercase tracking-widest text-stone-500 font-mono">days left</div>
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
 <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
     <div class="card p-5">
         <div class="text-sm text-stone-500">Active right now</div>

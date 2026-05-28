@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Superadmin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function show(): View
     {
-        return view('auth.login');
+        return view('superadmin.login');
     }
 
     public function store(Request $request): RedirectResponse
@@ -24,31 +24,22 @@ class LoginController extends Controller
 
         if (! Auth::attempt($data, $request->boolean('remember'))) {
             return back()
-                ->withErrors(['email' => 'Those credentials do not match our records.'])
+                ->withErrors(['email' => 'Invalid credentials.'])
                 ->onlyInput('email');
         }
 
         $user = Auth::user();
+        if (! $user->is_superadmin) {
+            Auth::logout();
+            return back()->withErrors(['email' => 'This account is not a superadmin.']);
+        }
         if (! $user->is_active) {
             Auth::logout();
             return back()->withErrors(['email' => 'This account is disabled.']);
         }
 
         $request->session()->regenerate();
-
-        // Superadmins go to the platform control panel
-        if ($user->is_superadmin) {
-            return redirect()->intended(route('superadmin.dashboard'));
-        }
-
-        // Tenant users: block disabled/archived businesses immediately
-        $business = $user->business;
-        if (! $business || ! $business->is_active || $business->archived_at) {
-            Auth::logout();
-            return back()->withErrors(['email' => 'Your business is currently disabled. Please contact support.']);
-        }
-
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route('superadmin.dashboard'));
     }
 
     public function destroy(Request $request): RedirectResponse
@@ -56,6 +47,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('login');
+        return redirect()->route('superadmin.login');
     }
 }

@@ -20,7 +20,7 @@ return [
 
     'currency' => env('POS_CURRENCY', 'INR'),
 
-    'currency_symbol' => env('POS_CURRENCY_SYMBOL', '₹'),
+    'currency_symbol' => env('POS_CURRENCY_SYMBOL', '$'),
 
     /*
     | Status thresholds (in minutes) for tablet dashboard chips.

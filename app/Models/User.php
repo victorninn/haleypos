@@ -12,7 +12,8 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'business_id', 'name', 'email', 'password', 'role', 'is_active',
+        'business_id', 'name', 'email', 'password', 'role',
+        'is_active', 'is_superadmin',
     ];
 
     protected $hidden = [
@@ -21,8 +22,9 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'is_active' => 'boolean',
+        'password'          => 'hashed',
+        'is_active'         => 'boolean',
+        'is_superadmin'     => 'boolean',
     ];
 
     public function business(): BelongsTo
@@ -38,5 +40,10 @@ class User extends Authenticatable
     public function isStaff(): bool
     {
         return $this->role === 'staff';
+    }
+
+    public function isSuperadmin(): bool
+    {
+        return (bool) $this->is_superadmin;
     }
 }

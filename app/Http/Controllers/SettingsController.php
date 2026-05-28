@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Business;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,13 +20,14 @@ class SettingsController extends Controller
         $business = Auth::user()->business;
 
         $data = $request->validate([
-            'name' => 'required|string|max:120',
-            'code' => 'required|string|max:10',
-            'phone' => 'nullable|string|max:30',
-            'email' => 'nullable|email|max:120',
-            'address' => 'nullable|string|max:500',
+            'name'            => 'required|string|max:120',
+            'code'            => 'required|string|max:10',
+            'phone'           => 'nullable|string|max:30',
+            'email'           => 'nullable|email|max:120',
+            'address'         => 'nullable|string|max:500',
             'currency_symbol' => 'nullable|string|max:8',
-            'logo' => 'nullable|image|max:2048',
+            'primary_color'   => 'nullable|string|max:16',
+            'logo'            => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('logo')) {

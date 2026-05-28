@@ -55,8 +55,7 @@ Open **http://localhost:8000** — you'll see the parent lookup page. Staff logi
 |-------|--------------------|----------|
 | Admin | admin@haleys.test  | password |
 | Staff | staff@haleys.test  | password |
-
-test 
+ 
 The seeder also creates one business (`Haleys Playhouse`, code `HAL`), 4 packages and 4 sample children.
 
 ---
@@ -139,7 +138,7 @@ Logo file should live in `/public/assets/` (e.g. `/assets/logo.svg`) or be uploa
 
 -- e.g. via MySQL or `php artisan tinker`
 INSERT INTO businesses (name, slug, code, currency_symbol, created_at, updated_at)
-VALUES ('BouncyTown', 'bouncytown', 'BNC', '₹', NOW(), NOW());
+VALUES ('BouncyTown', 'bouncytown', 'BNC', '$', NOW(), NOW());
 
 INSERT INTO users (business_id, name, email, password, role, is_active, created_at, updated_at)
 VALUES (2, 'BouncyTown Owner', 'owner@bouncytown.test',

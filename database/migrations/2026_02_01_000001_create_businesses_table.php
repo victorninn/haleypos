@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('address')->nullable();
-            $table->string('currency_symbol', 8)->default('₹');
+            $table->string('currency_symbol', 8)->default('$');
             $table->json('settings')->nullable();
             $table->timestamps();
         });

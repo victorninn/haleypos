@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Business;
 use App\Models\Child;
 use App\Models\Package;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,26 +15,45 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Platform superadmin (NOT tied to any business)
+        $this->call(SuperadminSeeder::class);
+
         $business = Business::firstOrCreate(
             ['slug' => 'haleys-hq'],
             [
-                'name' => 'Haleys Playhouse',
-                'code' => 'HAL',
-                'phone' => '+91 90000 00000',
-                'email' => 'hello@haleys.test',
-                'address' => '1st Floor, Sunshine Plaza, MG Road',
+                'name'            => 'Haleys Playhouse',
+                'code'            => 'HAL',
+                'phone'           => '+91 90000 00000',
+                'email'           => 'hello@haleys.test',
+                'address'         => '1st Floor, Sunshine Plaza, MG Road',
                 'currency_symbol' => '₹',
+                'primary_color'   => '#f97316',
+                'is_active'       => true,
             ]
         );
+
+        // Seed an active 1-year subscription so the demo tenant works out of the box
+        Subscription::updateOrCreate(
+            ['business_id' => $business->id],
+            [
+                'plan_type'   => Subscription::PLAN_YEAR_1,
+                'starts_at'   => now(),
+                'expires_at'  => now()->addYear(),
+                'status'      => 'active',
+                'is_trial'    => false,
+                'is_lifetime' => false,
+            ]
+        );
+        $business->update(['subscription_status' => 'active']);
 
         User::firstOrCreate(
             ['email' => 'admin@haleys.test'],
             [
                 'business_id' => $business->id,
-                'name' => 'Haleys Admin',
-                'password' => Hash::make('password'),
-                'role' => 'admin',
-                'is_active' => true,
+                'name'        => 'Haleys Admin',
+                'password'    => Hash::make('password'),
+                'role'        => 'admin',
+                'is_active'   => true,
             ]
         );
 
@@ -41,10 +61,10 @@ class DatabaseSeeder extends Seeder
             ['email' => 'staff@haleys.test'],
             [
                 'business_id' => $business->id,
-                'name' => 'Front Desk',
-                'password' => Hash::make('password'),
-                'role' => 'staff',
-                'is_active' => true,
+                'name'        => 'Front Desk',
+                'password'    => Hash::make('password'),
+                'role'        => 'staff',
+                'is_active'   => true,
             ]
         );
 
@@ -71,7 +91,7 @@ class DatabaseSeeder extends Seeder
             Child::firstOrCreate(
                 ['business_id' => $business->id, 'name' => $k['name']],
                 array_merge($k, [
-                    'child_code' => 'C-'.strtoupper(Str::random(6)),
+                    'child_code'        => 'C-'.strtoupper(Str::random(6)),
                     'emergency_contact' => $k['contact_number'],
                 ])
             );

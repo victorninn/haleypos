@@ -6,6 +6,7 @@ use App\Models\Package;
 use App\Models\PlaySession;
 use App\Services\SessionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -35,6 +36,8 @@ class DashboardController extends Controller
             ->orderBy('sort_order')->orderBy('price')
             ->get();
 
-        return view('dashboard.index', compact('activeSessions', 'stats', 'activePackages'));
+        $subscription = Auth::user()?->business?->subscription;
+
+        return view('dashboard.index', compact('activeSessions', 'stats', 'activePackages', 'subscription'));
     }
 }

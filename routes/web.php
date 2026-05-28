@@ -10,6 +10,10 @@ use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StaffController;
+use App\Http\Controllers\Superadmin\AuthController as SuperadminAuthController;
+use App\Http\Controllers\Superadmin\BusinessController as SaBusinessController;
+use App\Http\Controllers\Superadmin\DashboardController as SuperadminDashboard;
+use App\Http\Controllers\Superadmin\SubscriptionController as SaSubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 // Public parent portal (no login)
@@ -17,13 +21,59 @@ Route::get('/', [ParentPortalController::class, 'show'])->name('home');
 Route::get('/lookup', [ParentPortalController::class, 'show'])->name('parent.lookup');
 Route::get('/children/{child}/qr', [ParentPortalController::class, 'qr'])->name('children.qr');
 
-// Auth
+// Tenant auth
 Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
 Route::post('/login', [LoginController::class, 'store'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
-// Authenticated app (admin + staff)
-Route::middleware(['auth', 'tenant'])->group(function () {
+// Subscription expired landing (auth required so we can show business info)
+Route::get('/subscription/expired', function () {
+    return view('subscription.expired');
+})->middleware('auth')->name('subscription.expired');
+
+/*
+|--------------------------------------------------------------------------
+| Superadmin (platform control plane)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('superadmin')->group(function () {
+    Route::get('/login', [SuperadminAuthController::class, 'show'])->middleware('guest')->name('superadmin.login');
+    Route::post('/login', [SuperadminAuthController::class, 'store'])->middleware('guest')->name('superadmin.login.store');
+    Route::post('/logout', [SuperadminAuthController::class, 'destroy'])->middleware('auth')->name('superadmin.logout');
+
+    Route::middleware(['auth', 'superadmin'])->group(function () {
+        Route::get('/', SuperadminDashboard::class)->name('superadmin.dashboard');
+        Route::get('/dashboard', SuperadminDashboard::class)->name('superadmin.dashboard.alias');
+
+        Route::get('/businesses/archived', [SaBusinessController::class, 'archived'])->name('superadmin.businesses.archived');
+        Route::get('/businesses/trashed',  [SaBusinessController::class, 'trashed'])->name('superadmin.businesses.trashed');
+        Route::post('/businesses/{id}/restore-deleted', [SaBusinessController::class, 'restoreDeleted'])->name('superadmin.businesses.restoreDeleted');
+        Route::delete('/businesses/{id}/force',         [SaBusinessController::class, 'forceDelete'])->name('superadmin.businesses.forceDelete');
+
+        Route::get('/businesses',                       [SaBusinessController::class, 'index'])->name('superadmin.businesses.index');
+        Route::get('/businesses/create',                [SaBusinessController::class, 'create'])->name('superadmin.businesses.create');
+        Route::post('/businesses',                      [SaBusinessController::class, 'store'])->name('superadmin.businesses.store');
+        Route::get('/businesses/{business}',            [SaBusinessController::class, 'show'])->name('superadmin.businesses.show');
+        Route::get('/businesses/{business}/edit',       [SaBusinessController::class, 'edit'])->name('superadmin.businesses.edit');
+        Route::put('/businesses/{business}',            [SaBusinessController::class, 'update'])->name('superadmin.businesses.update');
+        Route::delete('/businesses/{business}',         [SaBusinessController::class, 'destroy'])->name('superadmin.businesses.destroy');
+
+        Route::post('/businesses/{business}/deactivate', [SaBusinessController::class, 'deactivate'])->name('superadmin.businesses.deactivate');
+        Route::post('/businesses/{business}/reactivate', [SaBusinessController::class, 'reactivate'])->name('superadmin.businesses.reactivate');
+        Route::post('/businesses/{business}/archive',    [SaBusinessController::class, 'archive'])->name('superadmin.businesses.archive');
+        Route::post('/businesses/{business}/restore',    [SaBusinessController::class, 'restore'])->name('superadmin.businesses.restore');
+
+        Route::post('/businesses/{business}/subscription',               [SaSubscriptionController::class, 'update'])->name('superadmin.businesses.subscription.update');
+        Route::post('/businesses/{business}/subscription/reactivate',    [SaSubscriptionController::class, 'reactivate'])->name('superadmin.businesses.subscription.reactivate');
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Tenant app — requires active business + active subscription
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'tenant', 'subscription'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     // Children
