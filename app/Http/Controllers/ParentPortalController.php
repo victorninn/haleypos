@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Child;
 use App\Models\PlaySession;
 use Illuminate\Http\Request;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ParentPortalController extends Controller
 {
@@ -55,10 +54,9 @@ class ParentPortalController extends Controller
         return view('parent.lookup', compact('code', 'child', 'activeSession', 'sessions', 'subscriptionBlocked'));
     }
 
-    public function qr(Child $child)
-    {
-        $url = route('parent.lookup', ['code' => $child->child_code]);
-        $svg = QrCode::format('svg')->size(220)->margin(1)->generate($url);
-        return response($svg, 200, ['Content-Type' => 'image/svg+xml']);
-    }
+public function qr(Child $child)
+{
+    $url = urlencode(route('parent.lookup', ['code' => $child->child_code]));
+    return redirect("https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={$url}");
+}
 }

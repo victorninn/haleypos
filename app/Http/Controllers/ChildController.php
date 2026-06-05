@@ -54,6 +54,13 @@ class ChildController extends Controller
         return view('children.show', compact('child', 'sessions'));
     }
 
+    public function qr(Child $child)
+{
+    $url = urlencode(route('parent.lookup', ['code' => $child->child_code]));
+    return redirect("https://api.qrserver.com/v1/create-qr-code/?size=220x220&data={$url}");
+}
+    
+
     public function edit(Child $child)
     {
         return view('children.edit', compact('child'));
@@ -101,4 +108,5 @@ class ChildController extends Controller
         } while (Child::withoutBusinessScope()->where('child_code', $code)->exists());
         return $code;
     }
+    
 }
