@@ -70,7 +70,19 @@
 
 <div class="flex items-center justify-between mb-3">
     <h2 class="text-xl font-bold text-stone-900">Active sessions</h2>
-    <div class="text-sm text-stone-500">Auto-refreshes every 30s</div>
+    <div class="flex items-center gap-3">
+        <div class="text-sm text-stone-500">Auto-refreshes every 30s</div>
+        <a href="{{ route('dashboard.display') }}"
+           target="_blank"
+           rel="noopener"
+           class="btn btn-ghost py-2 text-sm flex items-center gap-1.5">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+            Open display
+        </a>
+    </div>
 </div>
 
 @if($activeSessions->isEmpty())

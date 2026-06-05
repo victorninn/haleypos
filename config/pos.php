@@ -16,7 +16,7 @@ return [
 
     'brand_logo' => env('POS_BRAND_LOGO', '/assets/logo.svg'),
 
-    'tagline' => env('POS_BRAND_TAGLINE', 'Indoor playhouse, sorted.'),
+   /* 'tagline' => env('POS_BRAND_TAGLINE', 'Indoor playhouse, sorted.'), */
 
     'currency' => env('POS_CURRENCY', 'INR'),
 

@@ -40,4 +40,16 @@ class DashboardController extends Controller
 
         return view('dashboard.index', compact('activeSessions', 'stats', 'activePackages', 'subscription'));
     }
+
+    public function display(SessionService $sessionService): View
+    {
+        $sessionService->sweepExpiredSessions();
+
+        $activeSessions = PlaySession::with(['child', 'package'])
+            ->where('status', 'active')
+            ->orderBy('expected_end_time')
+            ->get();
+
+        return view('dashboard.display', compact('activeSessions'));
+    }
 }

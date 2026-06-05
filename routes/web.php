@@ -75,6 +75,8 @@ Route::prefix('superadmin')->group(function () {
 */
 Route::middleware(['auth', 'tenant', 'subscription'])->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::get('/dashboard/display', [DashboardController::class, 'display'])->name('dashboard.display');
+
 
     // Children
     Route::resource('children', ChildController::class);
