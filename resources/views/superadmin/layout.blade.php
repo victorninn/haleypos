@@ -11,23 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui'],
-              mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
-            },
-            colors: {
-              ink: { 950: '#070b14', 900: '#0b1220', 800: '#111a2e', 700: '#1c2742', 600: '#2a3656', 500: '#475174' },
-              accent: { 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490' },
-            },
-          }
-        }
-      }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
       html, body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
       body { background: #070b14; color: #e2e8f0; }

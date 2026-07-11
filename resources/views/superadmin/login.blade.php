@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Sign in · {{ config('platform.name') }}</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
       body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; background:#070b14; color:#e2e8f0; }
       .grid-bg {

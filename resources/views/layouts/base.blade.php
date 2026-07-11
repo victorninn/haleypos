@@ -8,31 +8,11 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
-            colors: {
-              brand: {
-                50: '#fff7ed', 100: '#ffedd5', 200: '#fed7aa', 300: '#fdba74',
-                400: '#fb923c', 500: '#f97316', 600: '#ea580c', 700: '#c2410c',
-                800: '#9a3412', 900: '#7c2d12'
-              }
-            },
-            boxShadow: {
-              card: '0 6px 20px -8px rgba(15,23,42,0.18)'
-            }
-          }
-        }
-      }
-    </script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('head')
     <style>
-        html, body { font-family: 'Inter', system-ui, sans-serif; }
         body { background: #faf6f0; color: #1f1d2b; }
 
         :root {

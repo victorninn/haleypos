@@ -37,6 +37,7 @@
                 @csrf
                 <button class="btn btn-ghost" data-testid="expired-logout-btn">Sign out</button>
             </form>
+            <p class="text-stone-600 mt-3">Contact Admin: +63 917 712 3384 or email at admin@playhouse.com</p>
         @else
             <a href="{{ route('login') }}" class="btn btn-primary mt-7 inline-flex">Back to login</a>
         @endauth
