@@ -2,6 +2,13 @@
 @section('title', 'Receipts')
 @section('subtitle', 'All issued receipts (latest first)')
 
+@section('topbar-actions')
+<a href="{{ route('receipts.exportCsv') }}" class="btn btn-ghost">Download All (CSV)</a>
+@if(auth()->user()?->isAdmin())
+<button type="button" onclick="confirmDeleteAllReceipts()" class="btn btn-danger">Delete All</button>
+@endif
+@endsection
+
 @section('content')
 <div class="card overflow-hidden">
     <table class="w-full text-left">
@@ -34,4 +41,20 @@
     </table>
 </div>
 <div class="mt-4">{{ $receipts->links() }}</div>
+
+<form id="delete-all-receipts-form" method="POST" action="{{ route('receipts.destroyAll') }}" class="hidden">
+    @csrf
+    @method('DELETE')
+    <input type="hidden" name="confirm" id="delete-all-confirm-input">
+</form>
+
+<script>
+function confirmDeleteAllReceipts() {
+    const typed = prompt('This permanently deletes ALL receipts for this business. Type DELETE to confirm:');
+    if (typed === 'DELETE') {
+        document.getElementById('delete-all-confirm-input').value = 'DELETE';
+        document.getElementById('delete-all-receipts-form').submit();
+    }
+}
+</script>
 @endsection

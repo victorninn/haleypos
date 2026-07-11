@@ -92,8 +92,12 @@ Route::middleware(['auth', 'tenant', 'subscription'])->group(function () {
 
     // Receipts
     Route::get('/receipts', [ReceiptController::class, 'index'])->name('receipts.index');
+    Route::get('/receipts/export', [ReceiptController::class, 'exportCsv'])->name('receipts.exportCsv');
     Route::get('/receipts/{receipt}', [ReceiptController::class, 'show'])->name('receipts.show');
     Route::get('/receipts/{receipt}/print', [ReceiptController::class, 'print'])->name('receipts.print');
+    
+
+    
 
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
@@ -109,5 +113,9 @@ Route::middleware(['auth', 'tenant', 'subscription'])->group(function () {
         Route::get('/staff/create', [StaffController::class, 'create'])->name('staff.create');
         Route::post('/staff', [StaffController::class, 'store'])->name('staff.store');
         Route::post('/staff/{user}/toggle', [StaffController::class, 'toggle'])->name('staff.toggle');
+
+        Route::delete('/receipts', [ReceiptController::class, 'destroyAll'])->name('receipts.destroyAll');
     });
 });
+
+
