@@ -22,7 +22,7 @@
         <h1 class="text-3xl sm:text-4xl font-extrabold text-stone-900">Check on your child</h1>
         <p class="text-stone-600 mt-2">Enter the child code or scan the QR you received at check-in.</p>
 
-        <form method="GET" action="{{ route('parent.lookup') }}" class="mt-6 flex gap-2 max-w-xxl">
+        <form method="GET" action="{{ route('parent.lookup', $business->slug) }}" class="mt-6 flex gap-2 max-w-xxl">
             <input class="input text-lg" name="code" value="{{ $code }}" placeholder="e.g. C-AB12CD" required autofocus>
             <button class="btn btn-primary text-lg px-6 justify-center">Look up</button>
         </form>

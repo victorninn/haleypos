@@ -16,15 +16,14 @@ use App\Http\Controllers\Superadmin\DashboardController as SuperadminDashboard;
 use App\Http\Controllers\Superadmin\SubscriptionController as SaSubscriptionController;
 use Illuminate\Support\Facades\Route;
 
-// Public parent portal (no login)
-Route::get('/', [ParentPortalController::class, 'show'])->name('home');
-Route::get('/lookup', [ParentPortalController::class, 'show'])->name('parent.lookup');
-Route::get('/children/{child}/qr', [ParentPortalController::class, 'qr'])->name('children.qr');
-
-// Tenant auth
-Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
-Route::post('/login', [LoginController::class, 'store'])->middleware('guest');
+// Home is now the tenant login screen
+Route::get('/', [LoginController::class, 'show'])->middleware('guest')->name('login');
+Route::post('/', [LoginController::class, 'store'])->middleware('guest');
 Route::post('/logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
+
+// Public parent portal — scoped to one tenant via slug, no login required
+Route::get('/{business:slug}/lookup', [ParentPortalController::class, 'show'])->name('parent.lookup');
+Route::get('/{business:slug}/children/{child}/qr', [ParentPortalController::class, 'qr'])->name('children.qr');
 
 // Subscription expired landing (auth required so we can show business info)
 Route::get('/subscription/expired', function () {

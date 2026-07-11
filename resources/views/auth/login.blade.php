@@ -70,9 +70,7 @@
                     Staff: <code>staff@haleys.test</code> / <code>password</code>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <a href="{{ route('parent.lookup') }}" class="text-sm text-brand-600 hover:underline">Parent? Look up your child →</a>
-                </div>
+
             </div>
         </div>
 

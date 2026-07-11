@@ -28,8 +28,8 @@
 
         <div class="mt-6 pt-5 border-t border-stone-100 text-center">
             <div class="text-sm text-stone-500 mb-2">Parent lookup QR</div>
-            <img src="{{ route('children.qr', $child) }}" class="mx-auto w-44 h-44 bg-white p-2 border border-stone-200 rounded-xl" alt="QR">
-            <div class="mt-2 text-xs text-stone-500 break-all">{{ route('parent.lookup', ['code' => $child->child_code]) }}</div>
+            <img src="{{ route('children.qr', ['business' => $child->business->slug, 'child' => $child]) }}" class="mx-auto w-44 h-44 bg-white p-2 border border-stone-200 rounded-xl" alt="QR">
+            <div class="mt-2 text-xs text-stone-500 break-all">{{ route('parent.lookup', ['business' => $child->business->slug, 'code' => $child->child_code]) }}</div>
         </div>
     </div>
 
