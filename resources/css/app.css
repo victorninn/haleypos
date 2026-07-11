@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 
 button { cursor: pointer; }
+input.input.pl-9 {
+    padding: .7rem 2rem;
+}
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
 
